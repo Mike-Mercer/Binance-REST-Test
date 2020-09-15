@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 public class MakeMoneyAlgo
 {
+	public bool Terminated = false;
+	public int workersCount = 0;
+
 	public MakeMoneyAlgo()
 	{
 	}
-	public bool Terminated = false;
-
-	public int workersCount = 0;
 
 	public void checkState() 
 	{	
@@ -24,11 +24,10 @@ public class MakeMoneyAlgo
 
 	private void newIteration()
 	{
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < BinanceSpot.settings.OrdersCount; i++)
 		{
 			Thread thread = new Thread(() => Run());
 			thread.Start();
-
 		}
 	}
 
@@ -40,12 +39,13 @@ public class MakeMoneyAlgo
 			actualSleepTime += 500;
 			Thread.Sleep(500);
 		}
-
 	}
-
 
 	private void Run()
 	{
+		Random rnd = new Random();
+		Thread.Sleep(rnd.Next(100, 1500));  // dont push all orders at once
+
 		BinanceClient bClient = new BinanceClient();
 		Spot.BinanceOrder order = bClient.PlaceMinBuyOrder(BinanceSpot.RandomSymbol());
 		if (order == null) { return; }	
@@ -65,9 +65,7 @@ public class MakeMoneyAlgo
 		Thread.Sleep(500);
 
 		Interlocked.Decrement(ref workersCount);
-
 	}
-
 }
 
 

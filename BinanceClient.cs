@@ -17,13 +17,10 @@ enum RequestType
 public class BinanceClient
 {
 	static readonly string BaseURL = "https://api.binance.com/api/v3/";
-
     private HttpClient client;
     private bool IgnoreFirstRequest = true; // the very first request's timing is higher to establish connection
     private Random rnd = new Random();
-    private HttpStatusCode lastResult; 
-    
-
+    private HttpStatusCode lastResult;   
 
     public BinanceClient()
 	{
@@ -37,7 +34,6 @@ public class BinanceClient
         {
             client.DefaultRequestHeaders.Add("X-MBX-APIKEY", BinanceSpot.settings.ApiKey);
         }
-
     }
 
     private string RandomString(int length)
@@ -54,7 +50,7 @@ public class BinanceClient
         return milliseconds.ToString();
     }
 
-    private string PublicGetRequest(string endpoint, string args = "",
+    private string DoRestRequest(string endpoint, string args = "",
         RequestType httpMethod = RequestType.GET,
         bool DoSigned = false)  
     {
@@ -62,7 +58,6 @@ public class BinanceClient
   
         string responseString;
         Stopwatch sw = new Stopwatch();
-        sw.Start();
         try
         {
             if (DoSigned)
@@ -73,6 +68,8 @@ public class BinanceClient
                 args += "&signature=" + signature;
             }
             if (!string.IsNullOrEmpty(args)) { args = "?" + args; }
+
+            sw.Start();
 
             HttpResponseMessage response;
             switch (httpMethod)
@@ -87,11 +84,12 @@ public class BinanceClient
                     response = client.GetAsync(BaseURL + endpoint + args).Result;
                     break;
             }
-
             lastResult = response.StatusCode;
             responseString = response.Content.ReadAsStringAsync().Result;
+
             sw.Stop();
             ElapsedTime = sw.ElapsedMilliseconds;
+
             IEnumerable<string> values;
             if (response.Headers.TryGetValues("X-MBX-USED-WEIGHT", out values))
             {
@@ -113,32 +111,32 @@ public class BinanceClient
 
     public void UpdateExchangeInfo()
     {
-        BinanceSpot.updateSymbols(PublicGetRequest("exchangeInfo"));
+        BinanceSpot.updateSymbols(DoRestRequest("exchangeInfo"));
         UpdatePrices();
     }
 
     public void UpdatePrices()
     {
-        BinanceSpot.updatePrices(PublicGetRequest("ticker/bookTicker"));
+        BinanceSpot.updatePrices(DoRestRequest("ticker/bookTicker"));
     }
     public void GetBalances()
     {
-        string rawData = PublicGetRequest("account", "", 
+        string rawData = DoRestRequest("account", "", 
             RequestType.GET, true);
     }
     public void GetKLines(Spot.Symbol sym)
     {
-        string rawData = PublicGetRequest("klines", $"symbol={sym.symbol}&interval=5m");
+        string rawData = DoRestRequest("klines", $"symbol={sym.symbol}&interval=5m");
     }
     public void GetOrderBook(Spot.Symbol sym)
     {
-        string rawData = PublicGetRequest("depth", $"symbol={sym.symbol}&limit=100");
+        string rawData = DoRestRequest("depth", $"symbol={sym.symbol}&limit=100");
     }
 
     public Spot.BinanceOrder PlaceBuyOrder(string symbol, double quantity, double price, string type = "LIMIT")
     {
         string ClientOrderID = "odn_" + RandomString(16);
-        string rawData = PublicGetRequest("order",
+        string rawData = DoRestRequest("order",
             $"symbol={symbol}&side=BUY&type={type}&quantity={Math.Round(quantity,8)}&price={Math.Round(price,8)}&timeInForce=GTC&newClientOrderId={ClientOrderID}",
             RequestType.POST, true);
 
@@ -180,19 +178,19 @@ public class BinanceClient
 
     public void CancelOrder(string symbol, string orderID)
     {
-        string rawData = PublicGetRequest("order",
+        string rawData = DoRestRequest("order",
             $"symbol={symbol}&origClientOrderId={orderID}", RequestType.DELETE, true);
     }
 
     public void CheckOrder(Spot.BinanceOrder order)
     {
-        string rawData = PublicGetRequest("order",
+        string rawData = DoRestRequest("order",
             $"symbol={order.Symbol}&orderId={order.OrderId}", RequestType.GET, true);
         if (rawData.Contains("does not exist")) 
         {
             long timeDelta = Convert.ToInt64((DateTime.UtcNow - order.CreateTime).TotalMilliseconds);
 
-            Logger.ReportODN(timeDelta, $"The actually existing order (id: {order.OrderId}, clientID: {order.ClientOrderId}) " + 
+            Logger.ReportODN(timeDelta, $"The actually existing order (Market:{order.Symbol} id: {order.OrderId}, clientID: {order.ClientOrderId}) " + 
                 $"\n  created {order.CreateTime.ToLongTimeString()} \n  was reported as does not exist since {timeDelta} ms after creation!");
         }
 

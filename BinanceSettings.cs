@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 public class BinanceSettings
 {
+    public int OrdersCount { get; set; } = 30;
     public string ApiKey { get; set; } = "";
     public string ApiSecret { get; set; } = "";
     public bool KeysSet = false;
