@@ -32,7 +32,7 @@ public static class Logger
 
     public static void ConsoleOut(string message)
     {
-        message = DateTime.Now.ToString() + ": " + message;
+        message = DateTime.UtcNow.ToString() + ": " + message;
         Console.WriteLine("\n" + message);
         Log(message);
 
