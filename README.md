@@ -9,9 +9,9 @@ The app will execute simple but profitable strategy: it puts some buy orders on 
 
 While waiting, it checks orders state using REST endpoint `Get order`.
 If the order's state is unknown due to the bug, this fact will be logged with the order's creation time, ID and the time passed since creation.
-### In another words, the time how long we was unable to know the actual order's status.
+### In other words, the time how long we were unable to know the actual order's status.
 
-Also the log will contain timing taken by REST request to the binance API to excecute (milliseconds)
+Also the log will contain timing taken by REST request to the binance API to execute (milliseconds)
 
 ## Some results
 
