@@ -2,7 +2,7 @@
 ### This test also measures binance REST latency
 
 ## The essence of the "Order does not exist" bug is that actually existing on the exchange order is reported as non-existing for too much time
-# This timne is actually may be up to 10 minutes ! 
+# This time is actually may be up to 10 minutes ! 
 
 To run the test, fill the Config.txt with your API keys.
 The app will execute simple but profitable strategy: it puts some buy orders on USDT markets below current price and waits for 10 minutes.
