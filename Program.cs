@@ -32,6 +32,7 @@ namespace RestTest
             while (!Terminated)
             {
                 Thread.Sleep(1000);
+                bClient.UpdatePrices();
                 if (BinanceSpot.CheckUsedWeight())
                     bClient.TestSequence();
                 Console.Write("\r Working ... Orders: {0} UsedWeight: {1}" + "         ", algo.workersCount, BinanceSpot.used_weight);
