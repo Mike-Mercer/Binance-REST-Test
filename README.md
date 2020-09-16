@@ -14,9 +14,19 @@ If the order's state is unknown due to the bug, this fact will be logged with th
 Also the log will contain timing taken by REST request to the binance API to execute (milliseconds)
 
 ## Some results
+№№№ Tokyo AWS
 
 ```
 9/15/2020 21:07:05: The actually existing order (id: 138283407, clientID: odn_HzxHQEIbUBK9YOoo) 
   created 18:06:43 
   was reported as does not exist since 21959 ms after creation!
+```
+```
+16-Sep-20 00:09:43: The actually existing order (Market:CHZUSDT id: 33380548, clientID: odn_Xun2O0QuQuxiUXVw)             
+  created 00:08:41                                                                                                        
+  was reported as does not exist since 61918 ms after creation! 
+```
+```
+16-Sep-20 04:48:01: Request order?symbol=FTMUSDT&orderId=47125437&recvWindow=6000&timestamp=1600231621212 
+took 60012 ms to excecute !
 ```
