@@ -14,7 +14,7 @@ If the order's state is unknown due to the bug, this fact will be logged with th
 Also the log will contain timing taken by REST request to the binance API to execute (milliseconds)
 
 ## Some results
-№№№ Tokyo AWS
+#### Tokyo AWS
 
 ```
 9/15/2020 21:07:05: The actually existing order (id: 138283407, clientID: odn_HzxHQEIbUBK9YOoo) 
