@@ -30,3 +30,5 @@ Also the log will contain timing taken by REST request to the binance API to exe
 16-Sep-20 04:48:01: Request order?symbol=FTMUSDT&orderId=47125437&recvWindow=6000&timestamp=1600231621212 
 took 60012 ms to excecute !
 ```
+
+### Real-time statistics from production trading bots https://api.moon-bot.com/latency/
