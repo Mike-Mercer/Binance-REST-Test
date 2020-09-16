@@ -8,6 +8,7 @@ using System.Text;
 
 public static class BinanceSpot
 {
+	const int MaxWeight = 1200;
 	public static List<Spot.Symbol> usdtSymbols;
 	public static int used_weight = 0;
 	public static BinanceSettings settings = BinanceSettings.LoadSettings();
@@ -16,6 +17,11 @@ public static class BinanceSpot
 	static BinanceSpot()
 	{
 		rnd = new Random();
+	}
+
+	public static bool CheckUsedWeight()
+	{
+		return (used_weight < MaxWeight * 0.9);
 	}
 
 	public static void updateSymbols(string rawData)

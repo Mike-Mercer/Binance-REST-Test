@@ -1,1 +1,2 @@
-{"KeysSet":false,"ApiKey":"","ApiSecret":""}
+{"ApiKey":"",
+"ApiSecret":""}

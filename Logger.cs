@@ -26,7 +26,6 @@ public static class Logger
             {
                 streamWriter.WriteLine(message);
             }
-
         }
     }
 
@@ -35,7 +34,6 @@ public static class Logger
         message = DateTime.UtcNow.ToString() + ": " + message;
         Console.WriteLine("\n" + message);
         Log(message);
-
     }
 
     public static void CheckRequestTiming(long ElapsedTime, string Request)
@@ -46,7 +44,6 @@ public static class Logger
             ConsoleOut($"Request {Request} took {ElapsedTime} ms to excecute !");
 
         }
-
     }
 
     public static void ReportODN(long ODN_Time, string orderData)
@@ -57,8 +54,5 @@ public static class Logger
             ConsoleOut(orderData);
         }
     }
-
-
-
 }
 

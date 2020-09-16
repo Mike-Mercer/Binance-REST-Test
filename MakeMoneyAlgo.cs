@@ -14,7 +14,7 @@ public class MakeMoneyAlgo
 
 	public void checkState() 
 	{	
-		if ((workersCount == 0) & BinanceSpot.settings.KeysSet) { newIteration(); }
+		if ((workersCount == 0) & BinanceSpot.settings.KeysSet & BinanceSpot.CheckUsedWeight()) { newIteration(); }
 	}
 
 	public void waitWorkers()

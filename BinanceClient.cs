@@ -55,7 +55,8 @@ public class BinanceClient
         bool DoSigned = false)  
     {
         long ElapsedTime = 0;
-  
+        string reqTypeStr = "";
+
         string responseString;
         Stopwatch sw = new Stopwatch();
         try
@@ -75,12 +76,15 @@ public class BinanceClient
             switch (httpMethod)
             {
                 case RequestType.POST:
+                    reqTypeStr = "POST ";
                     response = client.PostAsync(BaseURL + endpoint + args, null).Result;
                     break;
                 case RequestType.DELETE:
+                    reqTypeStr = "DELETE ";
                     response = client.DeleteAsync(BaseURL + endpoint + args).Result;
                     break;
                 default:
+                    reqTypeStr = "GET ";
                     response = client.GetAsync(BaseURL + endpoint + args).Result;
                     break;
             }
@@ -104,20 +108,24 @@ public class BinanceClient
             Logger.ConsoleOut($"Error making request {endpoint} : {e.Message}");
         }
         if (!IgnoreFirstRequest)
-            Logger.CheckRequestTiming(ElapsedTime, endpoint + args);
+            Logger.CheckRequestTiming(ElapsedTime, reqTypeStr + endpoint + args);
         IgnoreFirstRequest = false;
         return responseString;
     }
 
     public void UpdateExchangeInfo()
     {
-        BinanceSpot.updateSymbols(DoRestRequest("exchangeInfo"));
+        var rawResult = DoRestRequest("exchangeInfo");
+        if (lastResult == HttpStatusCode.OK)
+            BinanceSpot.updateSymbols(rawResult);
         UpdatePrices();
     }
 
     public void UpdatePrices()
     {
-        BinanceSpot.updatePrices(DoRestRequest("ticker/bookTicker"));
+        var rawResult = DoRestRequest("ticker/bookTicker");
+        if (lastResult == HttpStatusCode.OK)
+            BinanceSpot.updatePrices(rawResult);
     }
     public void GetBalances()
     {

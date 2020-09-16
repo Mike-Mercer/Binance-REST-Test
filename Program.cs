@@ -11,13 +11,12 @@ namespace RestTest
 {
     class Program
     {
-        const int MaxWeight = 1200;
         static MakeMoneyAlgo algo = new MakeMoneyAlgo();
         static bool Terminated = false;
 
         static void Main(string[] args)
         {
-            // Establish an event handler to process key press events.
+            // Establish an event handler to process CTRL-C
             Console.CancelKeyPress += new ConsoleCancelEventHandler(myHandler);
 
             ServicePointManager.DefaultConnectionLimit = 200;
@@ -33,15 +32,13 @@ namespace RestTest
             while (!Terminated)
             {
                 Thread.Sleep(1000);
-                bClient.TestSequence();
+                if (BinanceSpot.CheckUsedWeight())
+                    bClient.TestSequence();
                 Console.Write("\r Working ... Orders: {0} UsedWeight: {1}" + "         ", algo.workersCount, BinanceSpot.used_weight);
-                if (BinanceSpot.used_weight > MaxWeight * 0.9 ) { Thread.Sleep(5000); }
                 algo.checkState();
-
             }
             Console.WriteLine("\nWaiting workers....");
             algo.waitWorkers();
-
         }
         protected static void myHandler(object sender, ConsoleCancelEventArgs args)
         {
