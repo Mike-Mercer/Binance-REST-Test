@@ -1,7 +1,8 @@
-## This is the test of the diligently ignored by binance "Order does not exist" bug
+## This is the test of the "Order does not exist" bug
 ### This test also measures binance REST latency
 
 ## The essence of the "Order does not exist" bug is that actually existing on the exchange order is reported as non-existing for too much time
+
 # This time is actually may be up to 10 minutes ! 
 
 To run the test, fill the Config.txt with your API keys.
