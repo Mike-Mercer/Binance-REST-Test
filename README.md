@@ -33,3 +33,14 @@ took 60012 ms to excecute !
 ```
 
 ### Real-time statistics from production trading bots https://api.moon-bot.com/latency/
+
+### Updated 10.12.2020
+
+We've created a ticket containing a detailed description of this issue to Binance, the answer was published here: https://dev.binance.vision/t/faq-error-message-order-does-not-exist/46
+In essence the issue boils down to an excessive amount of records in the Orders DB.
+
+This topic is closed on dev.binance.vision and thus we're addressing the responsible Binance representatives here: Please review alternative options of temporary orders  storage, e.g. an additional orders in-memory DB keeping 1 hour of history; generally, orders older than 1 hour are available in the main DB.
+The issue described above is related only to recently placed orders.
+
+Please mind the fact that the issue presented above, regularly leads to financial losses incurred by API users whose primary trading technique is scalping
+
